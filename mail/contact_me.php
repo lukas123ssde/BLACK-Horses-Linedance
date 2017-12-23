@@ -1,37 +1,26 @@
 <?php
-$Empfaenger = „blackhorsesraitersaich@yahoo.com “;
+// Check for empty fields
+if(empty($_POST['name'])  		||
+   empty($_POST['email']) 		||
+   empty($_POST['phone']) 		||
+   empty($_POST['message'])	||
+   !filter_var($_POST['email'],FILTER_VALIDATE_EMAIL))
+   {
+	echo "No arguments Provided!";
+	return false;
+   }
+	
+$name = $_POST['name'];
+$email_address = $_POST['email'];
+$phone = $_POST['phone'];
+$message = $_POST['message'];
+	
+// Create the email and send the message
+$to = 'blackhorsesraitersaich@yahoo.com '; // Add your email address inbetween the '' replacing yourname@yourdomain.com - This is where the form will send a message to.
+$email_subject = "Website Contact Form:  $name";
+$email_body = "You have received a new message from your website contact form.\n\n"."Here are the details:\n\nName: $name\n\nEmail: $email_address\n\nPhone: $phone\n\nMessage:\n$message";
+$headers = "From: noreply@yourdomain.com\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
+$headers .= "Reply-To: $email_address";	
+mail($to,$email_subject,$email_body,$headers);
+return true;			
 ?>
-<html>
-<head>
-<title>Einfaches Kontaktformular mit HTML und PHP</title>
-</head>
-<body>
-<?php
-if($_REQUEST[’submit‘]){
-if(empty($_REQUEST[’name‘]) || empty($_REQUEST[‚email‘])
-|| empty($_REQUEST[‚text‘]))
-{
-echo“Bitte gehen Sie <a href=\“javascript:history.back();\“>
-zur&uuml;ck</a> und f&uuml;llen Sie alle Felder aus“;
-}
-else{
-$Mailnachricht=“Sie haben eine Anfrage über ihr Kontaktformular erhalten:\n“;
-$Mailnachricht .= „Name: „.$_REQUEST[’name‘].“\n“.
-„E-Mail: „.$_REQUEST[‚email‘].“\n“.
-„Betreff: „.$_REQUEST[‚betreff‘].“\n“.
-„Datum: „.date(„d.m.Y H:i“).“\n“.
-„\n\n“.$_REQUEST[‚text‘].“\n“;
-$Mailbetreff = „Kontakt: „.$_REQUEST[‚betreff‘];
-mail($Empfaenger, $Mailbetreff, $Mailnachricht, „From: „
-.$_REQUEST[‚email‘]);
-echo „Wir haben Ihre Anfrage erhalten und werden sie so schnell wie möglich bearbeiten. <br>
-<a href=\“javascript:history.back();\“>Zur&uuml;ck</a>“;
-}
-}
-else
-{
-echo“Ein Fehler ist aufgetreten. Hier können Sie eine <a href=\“kontakt.html\“>Anfrage</a> an uns senden.“;
-}
-?>
-</body>
-</html>
