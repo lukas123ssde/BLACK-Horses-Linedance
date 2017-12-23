@@ -1,143 +1,37 @@
 <?php
-
-
-$von = $_POST['von'];
-
-  $email = $_POST['email'];
-
-  $betreff = $_POST['betreff'];
-
-  $nachricht = $_POST['nachricht'];
-
-  $fertig = $_POST['fertig']; 
-
-
-
-function checkEmail( $email )
-
-  {
-
-  $nonascii      = "x80-xff"; 
-
-  $nqtext        = "[^\$nonascii1512"]";
-
-  $qchar         = "\[^$nonascii]";
-
-  $normuser      = '[a-zA-Z0-9][a-zA-Z0-9_.-]*';
-
-  $quotedstring  = ""(?:$nqtext|$qchar)+"";
-
-  $user_part     = "(?:$normuser|$quotedstring)";
-
-  $dom_mainpart  = '[a-zA-Z0-9][a-zA-Z0-9._-]*.';
-
-  $dom_subpart   = '(?:[a-zA-Z0-9][a-zA-Z0-9._-]*.)*';
-
-  $dom_tldpart   = '[a-zA-Z]{2,5}';
-
-  $domain_part   = "$dom_subpart$dom_mainpart$dom_tldpart";
-
-  $pattern       = "$user_part@$domain_part";
-
-  
-
-  if (!preg_match( "/$pattern$/", $email ))
-
-  {
-
-  return FALSE;
-
-  }
-
-  else
-
-  {
-
-  return TRUE;
-
-  }
-
-  } 
-
-
-if(isset($fertig)){
-
-
- if ($von == "") {
-
-  echo"<script type="text/javascript"> alert("Sie haben ihren Namen nicht angegeben!");</script>";
-
-  } elseif ($email == "") {
-
-  echo"<script type="text/javascript"> alert("Sie haben ihre Email nicht angegeben!");</script>";
-
-  } elseif ($betreff == "") {
-
-  echo"<script type="text/javascript"> alert("Sie haben keinen Betreff angegeben!");</script>";
-
-  } elseif ($nachricht == "") {
-
-  echo"<script type="text/javascript"> alert("Sie haben keine Nachricht angegeben!");</script>"; 
-
-  } elseif (!checkEmail( $_REQUEST['email'] )) {
-
-  echo"<script type="text/javascript"> alert("Die Email Adresse ist nicht gueltig!");</script>";
-
-  } else {
-
-  
-
-  
-
-
-
-$datum = date("d.m.Y");
-
-  $uhrzeit = date("H:i");
-
-  $datum=$datum ."-". $uhrzeit ."Uhr";
-
-
-
- 
-
-  $ich = "blackhorsesraitersaich@yahoo.com";
-
-  $betreffemail = "Kontaktformular";
-
-  $text = "Nachricht von: ".$von."
-
-  Seine e-Mail Adresse:  ".$email."
-
-  Betreff:  ".$betreff."
-
-  Sendedatum:  ".$datum."
-
-  Nachticht:  ".$nachricht."
-
-  
-
-  
-
-  
-
-  ";
-
-  mail($ich, $betreffemail, $text, 
-
-  "From: Mustername <Absenderemail>");
-
-  
-
-  echo"<script type="text/javascript"> alert("Die Nachricht wurde erfolgreich verschickt!");</script>"; 
-
-
- 
-
-
+$Empfaenger = „blackhorsesraitersaich@yahoo.com “;
+?>
+<html>
+<head>
+<title>Einfaches Kontaktformular mit HTML und PHP</title>
+</head>
+<body>
+<?php
+if($_REQUEST[’submit‘]){
+if(empty($_REQUEST[’name‘]) || empty($_REQUEST[‚email‘])
+|| empty($_REQUEST[‚text‘]))
+{
+echo“Bitte gehen Sie <a href=\“javascript:history.back();\“>
+zur&uuml;ck</a> und f&uuml;llen Sie alle Felder aus“;
 }
-
-  }
-
-  ?> 
-
+else{
+$Mailnachricht=“Sie haben eine Anfrage über ihr Kontaktformular erhalten:\n“;
+$Mailnachricht .= „Name: „.$_REQUEST[’name‘].“\n“.
+„E-Mail: „.$_REQUEST[‚email‘].“\n“.
+„Betreff: „.$_REQUEST[‚betreff‘].“\n“.
+„Datum: „.date(„d.m.Y H:i“).“\n“.
+„\n\n“.$_REQUEST[‚text‘].“\n“;
+$Mailbetreff = „Kontakt: „.$_REQUEST[‚betreff‘];
+mail($Empfaenger, $Mailbetreff, $Mailnachricht, „From: „
+.$_REQUEST[‚email‘]);
+echo „Wir haben Ihre Anfrage erhalten und werden sie so schnell wie möglich bearbeiten. <br>
+<a href=\“javascript:history.back();\“>Zur&uuml;ck</a>“;
+}
+}
+else
+{
+echo“Ein Fehler ist aufgetreten. Hier können Sie eine <a href=\“kontakt.html\“>Anfrage</a> an uns senden.“;
+}
+?>
+</body>
+</html>
